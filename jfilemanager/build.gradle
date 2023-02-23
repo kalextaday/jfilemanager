@@ -1,0 +1,107 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'java'
+    id "signing"
+    id "maven-publish"
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+}
+
+group = 'io.github.kalextaday'
+archivesBaseName = "Main"
+version = '0.0.1'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {  //only for users registered in Sonatype after 24 Feb 2021
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+            pom {
+                name = 'LibreriaFecha'
+                description = 'Demo of how to publish a Java Gradle based project to Maven Central'
+                url = 'https://github.com/kalextaday/jfilemanager'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'kalextaday'
+                        name = 'Kevin Taday'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/kalextaday/jfilemanager'
+                    connection = 'scm:git://github.com/kalextaday/jfilemanager.git'
+                    developerConnection = 'scm:git://github.com/kalextaday/jfilemanager.git'
+                }
+            }
+        }
+    }
+}
+
+// Generar firma de los archivos
+signing {
+    sign publishing.publications.mavenJava
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Creacion de archivo en txt acerca de la info basica de la app
+ext.genOutputDir = file("$buildDir/generated-resources")
+
+task generateVersionTxt()  {
+    ext.outputFile = file("$genOutputDir/version.txt")
+    outputs.file(outputFile)
+    doLast {
+        outputFile.text = """GroupId: ${project.group}
+        Name: ${project.name}
+        Version: $version
+        Build-time: ${java.time.LocalDateTime.now()}
+        """
+    }
+}
+
+sourceSets.main.output.dir genOutputDir, builtBy: generateVersionTxt
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
