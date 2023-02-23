@@ -4,6 +4,8 @@ package org.kev.filemanager.infrastructure;
 import org.kev.filemanager.application.impl.FileService;
 import org.kev.filemanager.domain.VoDirectory;
 
+import java.io.IOException;
+
 /**
  * Created by kevin on 27/12/2022.
  * Clase que se encarga de manejar los archivos

@@ -7,10 +7,11 @@ import org.kev.filemanager.domain.exceptions.FileException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
@@ -24,28 +25,33 @@ import java.util.stream.Collectors;
 public class FileService implements IFileService {
 
     @Override
-    public VoDirectory getProperties(String namePath) {
-        try {
-            VoDirectory voDirectory = new VoDirectory();
+    public VoDirectory getProperties(String namePath)  {
+        VoDirectory voDirectory = new VoDirectory();
 
-            File file = new File(namePath);
+        File file = new File(namePath);
 
-            if (file.isFile()) {
-                throw new FileException("La ruta enviada no es un directorio");
-            }
-            voDirectory.setName(file.getName());
-            voDirectory.setPath(file.getPath());
-            voDirectory.setDirectory(true);
-            voDirectory.setSizeBytes(Files.size(file.toPath()));
-            voDirectory.setDateLastModified(getLocalDateTime(file.lastModified()));
-            voDirectory.setChildren(this.getChildren(file));
+        Path path = Paths.get(namePath);
 
-
-            return voDirectory;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Files.notExists(path)) {
+            throw new FileException("La ruta enviada no existe");
         }
-        return null;
+
+        if (Files.isDirectory(path)){
+            try{
+                voDirectory.setName(file.getName());
+                voDirectory.setPath(file.getPath());
+                voDirectory.setDirectory(true);
+                voDirectory.setSizeBytes(Files.size(file.toPath()));
+                voDirectory.setDateLastModified(this.getLocalDateTime(file.lastModified()));
+                voDirectory.setChildren(this.getChildren(file));
+            }catch(IOException e){
+                throw new FileException("La ruta enviada no existe");
+            }
+        } else{
+            throw new FileException("La ruta enviada no es un directorio");
+        }
+
+        return voDirectory;
     }
 
     @Override
@@ -65,16 +71,15 @@ public class FileService implements IFileService {
                 try {
                     voDirectory.setSizeBytes(Files.size(file.toPath()));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new FileException("La ruta enviada no existe");
                 }
 
                 return voDirectory;
             }).collect(Collectors.toList());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new FileException("La ruta enviada no existe");
         }
-        return Collections.emptyList();
     }
 
     private LocalDateTime getLocalDateTime(long date) {

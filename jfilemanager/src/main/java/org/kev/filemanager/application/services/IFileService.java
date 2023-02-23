@@ -4,6 +4,7 @@ package org.kev.filemanager.application.services;
 import org.kev.filemanager.domain.VoDirectory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -15,6 +16,6 @@ import java.util.List;
  */
 public interface IFileService {
 
-    VoDirectory getProperties(String path);
+    VoDirectory getProperties(String path) throws IOException;
     List<VoDirectory> getChildren(File fileDirectory);
 }
