@@ -46,8 +46,8 @@ publishing {
         mavenJava(MavenPublication) {
             from(components.java)
             pom {
-                name = 'LibreriaFecha'
-                description = 'Demo of how to publish a Java Gradle based project to Maven Central'
+                name = 'FileManager'
+                description = 'Library for managing files'
                 url = 'https://github.com/kalextaday/jfilemanager'
                 licenses {
                     license {
