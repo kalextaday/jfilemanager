@@ -14,8 +14,9 @@ import java.util.List;
  * @author Kevin Taday
  * @version 1.0.0
  */
-public interface IFileService {
+public interface IDirectory {
 
-    VoDirectory getProperties(String path) throws IOException;
+    VoDirectory getProperties(String path);
     List<VoDirectory> getChildren(File fileDirectory);
+    List<VoDirectory> searchFile(String pathStart, String textParameter, String typeSearch);
 }

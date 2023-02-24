@@ -1,8 +1,9 @@
 <div id="top"></div>
 
 ![Java](https://img.shields.io/badge/-Java-000000?style=flat&logo=Java&logoColor=007396)
-![Java](https://img.shields.io/badge/version-0.0.1-blue)
+![Java](https://img.shields.io/badge/version-0.2.0-blue)
 ![Java](https://img.shields.io/badge/tests-100%25-green)
+![Java](https://img.shields.io/badge/Total%20tests-16-green)
 ![Java](https://img.shields.io/badge/build-pasing-brightgreen)
 ![Java](https://img.shields.io/badge/release%20date-feb%202023-orange)
 

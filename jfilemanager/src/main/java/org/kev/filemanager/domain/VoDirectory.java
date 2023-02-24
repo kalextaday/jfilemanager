@@ -1,5 +1,7 @@
 package org.kev.filemanager.domain;
 
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,6 +13,11 @@ import java.util.List;
  * @version 1.0.0
  * @see LocalDateTime
  */
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class VoDirectory {
 
     private String name;
@@ -20,51 +27,15 @@ public class VoDirectory {
     private LocalDateTime dateLastModified;
     private List<VoDirectory> children;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public boolean isDirectory() {
-        return isDirectory;
-    }
-
-    public void setDirectory(boolean directory) {
-        isDirectory = directory;
-    }
-
-    public List<VoDirectory> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<VoDirectory> children) {
-        this.children = children;
-    }
-
-    public long getSizeBytes() {
-        return sizeBytes;
-    }
-
-    public void setSizeBytes(long sizeBytes) {
-        this.sizeBytes = sizeBytes;
-    }
-
-    public LocalDateTime getDateLastModified() {
-        return dateLastModified;
-    }
-
-    public void setDateLastModified(LocalDateTime dateLastModified) {
-        this.dateLastModified = dateLastModified;
+    @Override
+    public String toString() {
+        return "VoDirectory{" +
+                "name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", isDirectory=" + isDirectory +
+                ", sizeBytes=" + sizeBytes +
+                ", dateLastModified=" + dateLastModified +
+                ", children=" + children +
+                '}';
     }
 }
